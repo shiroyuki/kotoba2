@@ -1,5 +1,5 @@
 from kotoba2.lexer  import Lexer
-from kotoba2.parser import Parser
+from kotoba2.parser import Parser, DataNode
 
 def debug_lexer(data):
     show_output = False
@@ -22,13 +22,40 @@ def debug_lexer(data):
 
 def debug_parser(tokens):
     parser = Parser()
-    parser.parse(tokens)
+    root   = parser.parse(tokens)
+
+    print_tree(root, 0)
+
+def print_tree(node, level):
+    indent = '    ' * level
+    if type(node) == DataNode:
+        #print('{}{}'.format(indent, node.data))
+        print('{}(... {}B)'.format(indent, len(node.data)))
+
+        return
+
+    attrs = []
+
+    for k in node.attributes:
+        v = node.attributes[k]
+        attrs.append('{}="{}"'.format(k, v))
+
+    if attrs:
+        print('{}<{} {}>'.format(indent, node.name, ' '.join(attrs)))
+    else:
+        print('{}<{}>'.format(indent, node.name))
+
+    for child in node.children:
+        print_tree(child, level + 1)
 
 ##### SANDBOX #####
 
+test_file = 'test.html'
+test_file = 'test-shiroyuki.com.html'
+#test_file = 'test.xml'
 data = None
 
-with open('test-shiroyuki.com.html', 'r') as f:
+with open(test_file, 'r') as f:
     data = f.read()
 
 debug_parser(
