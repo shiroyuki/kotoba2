@@ -46,7 +46,7 @@ class NodeFactory(object):
         token_type = type(token)
 
         if token_type not in ElementNode.TOKEN_TYPES:
-            NodeFactory.logger.debug('-- DATA ----- {} ({})'.format(token_type.__name__, token))
+            NodeFactory.logger.debug(u'-- DATA ----- {} ({})'.format(token_type.__name__, token))
 
             data = token.data.strip()
             node = DataNode()
@@ -55,7 +55,7 @@ class NodeFactory(object):
 
             return node
 
-        NodeFactory.logger.debug('-- ELEMENT -- {} ({})'.format(token_type.__name__, token))
+        NodeFactory.logger.debug(u'-- ELEMENT -- {} ({})'.format(token_type.__name__, token))
 
         data = token.data.strip()
         node = ElementNode()
@@ -67,7 +67,7 @@ class NodeFactory(object):
 
 class Parser(object):
     logger = logging.getLogger('kotoba2.parser.Parser')
-    logger.setLevel(logging.WARN)
+    logger.setLevel(logging.DEBUG)
 
     def parse(self, tokens):
         origin = None
@@ -96,10 +96,12 @@ class Parser(object):
                     raise RuntimeError('Expected <{}>, got <{}> instead'.format(parent.name, cursor.name))
                 stack.pop()
 
-            Parser.logger.debug('-- LEVEL -- {}'.format(len(stack)))
-            Parser.logger.debug('-- STACK -- {}'.format(stack))
+            Parser.logger.debug(u'-- LEVEL -- {}'.format(len(stack)))
+            Parser.logger.debug(u'-- CLASS -- {}'.format(token_type.__name__))
+            Parser.logger.debug(u'-- STACK -- {}'.format(stack))
 
             if not origin and token_type == OpenTagToken:
+                Parser.logger.debug(u'-- ORIGIN -- {}'.format(node))
                 origin = node
 
         return origin

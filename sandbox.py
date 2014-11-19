@@ -13,7 +13,7 @@ def debug_lexer(data):
         if show_output: print('{}\t| {}'.format(len(token), str(token).strip()[:line_length].strip()))
         pass
 
-    reassembled_data = ''.join([str(token) for token in tokens])
+    reassembled_data = ''.join([u'{}'.format(token) for token in tokens])
 
     if show_output: print('ORIGINAL DATA LENGTH:    {}'.format(len(data)))
     if show_output: print('REASSEMBLED DATA LENGTH: {}'.format(len(reassembled_data)))
@@ -28,9 +28,10 @@ def debug_parser(tokens):
 
 def print_tree(node, level):
     indent = '    ' * level
+
     if type(node) == DataNode:
-        #print('{}{}'.format(indent, node.data))
-        print('{}(... {}B)'.format(indent, len(node.data)))
+        #print(u'{}{}'.format(indent, node.data))
+        print(u'{}(... {}B)'.format(indent, len(node.data)))
 
         return
 
@@ -41,9 +42,9 @@ def print_tree(node, level):
         attrs.append('{}="{}"'.format(k, v))
 
     if attrs:
-        print('{}<{} {}>'.format(indent, node.name, ' '.join(attrs)))
+        print(u'{}<{} {}>'.format(indent, node.name, ' '.join(attrs)))
     else:
-        print('{}<{}>'.format(indent, node.name))
+        print(u'{}<{}>'.format(indent, node.name))
 
     for child in node.children:
         print_tree(child, level + 1)
@@ -51,7 +52,7 @@ def print_tree(node, level):
 ##### SANDBOX #####
 
 test_file = 'test.html'
-test_file = 'test-shiroyuki.com.html'
+#test_file = 'test-shiroyuki.com.html'
 #test_file = 'test.xml'
 data = None
 
